@@ -1,3 +1,4 @@
+import os
 import random
 import string
 from datetime import datetime
@@ -185,6 +186,5 @@ def ratelimit_handler(e):
 def not_found_handler(e):
     return jsonify({"error": "Endpoint not found. Please check the API documentation."}), 404
 
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
