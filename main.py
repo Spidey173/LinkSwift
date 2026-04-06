@@ -66,10 +66,10 @@ def is_valid_custom_code(code):
     return 4 <= len(code) <= 16 and code.isalnum()
 
 
-# Root endpoint - shows API information
 @app.route('/', methods=['GET'])
 def home():
-    """API information and available endpoints."""
+    base = request.host_url.rstrip('/')
+
     return jsonify({
         "service": "LinkSwift URL Shortener",
         "version": "1.0.0",
@@ -84,20 +84,21 @@ def home():
             },
             "GET /{short_code}": {
                 "description": "Redirect to original URL",
-                "example": "http://localhost:5001/abc123"
+                "example": f"{base}/abc123"
             },
             "GET /info/{short_code}": {
                 "description": "Get metadata and click count",
-                "example": "http://localhost:5001/info/abc123"
+                "example": f"{base}/info/abc123"
             }
         },
         "example_usage": {
-            "curl_create": "curl -X POST http://localhost:5001/shorten -H 'Content-Type: application/json' -d '{\"long_url\": \"https://www.example.com\"}'",
-            "curl_create_custom": "curl -X POST http://localhost:5001/shorten -H 'Content-Type: application/json' -d '{\"long_url\": \"https://www.example.com\", \"custom_code\": \"mycode\"}'",
-            "curl_redirect": "curl -L http://localhost:5001/mycode",
-            "curl_info": "curl http://localhost:5001/info/mycode"
+            "curl_create": f"curl -X POST {base}/shorten -H 'Content-Type: application/json' -d '{{\"long_url\": \"https://www.example.com\"}}'",
+            "curl_create_custom": f"curl -X POST {base}/shorten -H 'Content-Type: application/json' -d '{{\"long_url\": \"https://www.example.com\", \"custom_code\": \"mycode\"}}'",
+            "curl_redirect": f"curl -L {base}/mycode",
+            "curl_info": f"curl {base}/info/mycode"
         }
     }), 200
+
 
 
 # API Endpoints
